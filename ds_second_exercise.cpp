@@ -126,8 +126,6 @@ void SparseMatrix::put(int row , int col , int value){
         this->arr[i].col = newArr[i].col ;
         this->arr[i].value = newArr[i].value ;
     }
-    
-    
 }
 
 SparseMatrix SparseMatrix::add(SparseMatrix second_matrix){
