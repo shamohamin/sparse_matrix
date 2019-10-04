@@ -1,5 +1,9 @@
 #include <iostream>
+#include <fstream>
+#include <string.h>
+// #include <boost/algorithm/string.hpp>
 using namespace std ;
+#define size 100
 
 class SparseItem {
     public :
@@ -16,12 +20,15 @@ class SparseMatrix {
         SparseItem arr[100] ;
     public :
         SparseMatrix(int , int , int , SparseItem[] ) ;
+        SparseMatrix(){}
         ~SparseMatrix() ;
         void show() ;
         int get(int , int) ;
         SparseMatrix* transpose() ;
         void put(int , int , int) ;
         SparseMatrix add(SparseMatrix) ;
+        void read_file() ;
+        void write_file() ;
 };
 
 SparseMatrix::SparseMatrix(int row , int col ,int terms , SparseItem s[]){
@@ -178,16 +185,47 @@ SparseMatrix SparseMatrix::add(SparseMatrix second_matrix){
             }
         }
     }
-    cout << "heloo counter" << endl ;
-    for(int i = 0 ; i < counter ; i++ ){
-        cout << added_matrix[i].row << " " << added_matrix[i].col << " " << added_matrix[i].value << endl ;
-    } 
-    cout << "end counter" <<endl ;
-
     SparseMatrix matrix = SparseMatrix(this->row , this->col , counter ,added_matrix) ;
     return matrix ;
-
 } 
+
+void SparseMatrix::read_file(){
+
+    ifstream fin ;
+    fin.open("matrix.txt");
+    int col = 0 ;
+    int row = 0 ;
+    SparseItem arr[size] ;
+    int terms = 0 ;
+    int col_holder = 0 ;
+    while (fin){
+        string line ;
+        getline(fin , line) ;
+        if(line.length() == 0 ){
+            break ;
+        }
+        for(int i = 0 ; i < line.length() ; i++ ){
+            if(line[i] != '0' && line[i] != ' ') {
+                this->arr[terms].row = row ;
+                this->arr[terms].col = col ;
+                this->arr[terms].value = (int)line[i] - '0' ;  
+                terms++ ;
+                col++ ;
+            }
+            if (line[i] == '0')
+            {
+                col++ ;
+            }
+        }
+        col_holder = col ;
+        col = 0 ;
+        row++;
+    }
+    this->row = row  ;
+    this->col = col_holder ;
+    this->terms = terms ;
+    fin.close() ;
+}
 
 
 SparseMatrix::~SparseMatrix(){
@@ -226,7 +264,10 @@ int main(void){
     SparseItem arr[]= {s ,s1 ,s2 ,s3 };
     SparseItem arr1[] = {s4 ,s5 ,s6 ,s7 } ;
 
+    SparseMatrix sss = SparseMatrix();
+    sss.read_file();
 
+    sss.show();
 
     SparseMatrix ss = SparseMatrix(3 ,3 ,4 , arr)  ;
     // SparseMatrix sss = SparseMatrix(3 ,3 ,4 , arr1) ;
@@ -236,7 +277,7 @@ int main(void){
     try
     {
         // ss.put(2,0,1);
-        ss.show();
+        // ss.show();
     }
     catch(const char *e)
     {
