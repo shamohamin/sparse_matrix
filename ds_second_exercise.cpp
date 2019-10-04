@@ -84,27 +84,53 @@ SparseMatrix* SparseMatrix::transpose(){
                 newArr[counter].col = this->arr[j].row ;
                 newArr[counter].row = this->arr[j].col ;
                 newArr[counter].value = this->arr[j].value ;
+                counter ++ ;
             } 
         }
     }
 
-    // SparseMatrix *newSparseMatrix = new SparseMatrix(this->col , this->row , this->terms);
+    SparseMatrix *newSparseMatrix = new SparseMatrix(this->col , this->row , this->terms , newArr);
 
-    // return newSparseMatrix;
+    return newSparseMatrix;
 } 
 
 void SparseMatrix::put(int row , int col , int value){
-    this->terms = this->terms + 1 ;
-    SparseItem * newArr = new SparseItem[this->terms] ;
-    for(int i = 0 ; i < this->terms - 1 ; i++){
-        if (row == this->arr[i].row){
-            
-        }
+
+    if(this->col <= col || col < 0 || this->row <= row || row < 0){
+        throw "its not in matrix rage" ;
     }
+
+    this->terms = this->terms + 1 ;
+    SparseItem newArr[this->terms] ;
+    int hold_pos ;
+    for(int i = 0 ; i < this->terms - 1 ; i++){
+        if (row == this->arr[i].row || row > this->arr[i].row){
+            hold_pos = i ;
+            newArr[i].row = row ;
+            newArr[i].col = col ;
+            newArr[i].value = value ;
+            break;
+        }
+        newArr[i].row = this->arr[i].row ;
+        newArr[i].col = this->arr[i].col ;
+        newArr[i].value = this->arr[i].value ;
+    }
+    for (int i = hold_pos + 1 ; i < this->terms ; i++){
+        newArr[i].row = this->arr[i].row ;
+        newArr[i].col = this->arr[i].col ;
+        newArr[i].value = this->arr[i].value ;
+    }
+
+    for (int i = 0; i < this->terms; i++){
+        this->arr[i].row = newArr[i].row ;
+        this->arr[i].col = newArr[i].col ;
+        this->arr[i].value = newArr[i].value ;
+    }
+    
+    
 }
 
-SparseMatrix SparseMatrix::add(SparseMatrix second_matrix) {
-
+SparseMatrix SparseMatrix::add(SparseMatrix second_matrix){
     int counter = 0 ;
     SparseItem added_matrix[this->terms + second_matrix.terms] ;
     bool controller_for_this_arr = false ;
@@ -136,8 +162,8 @@ SparseMatrix SparseMatrix::add(SparseMatrix second_matrix) {
         for(int j = 0 ; j < second_matrix.terms ; j++ ){
             if (i == second_matrix.arr[j].row){
                 for(int k = 0 ; k < this->terms ; k++ ){
-                    if (this->arr[j].col == second_matrix.arr[j].col &&
-                       this->arr[j].row == second_matrix.arr[j].row){
+                    if (this->arr[k].col == second_matrix.arr[j].col &&
+                       this->arr[k].row == second_matrix.arr[j].row){
                         controller_for_second_matrix_arr = true ;
                         break ;
                     }
@@ -161,16 +187,13 @@ SparseMatrix SparseMatrix::add(SparseMatrix second_matrix) {
     cout << "end counter" <<endl ;
 
     SparseMatrix matrix = SparseMatrix(this->row , this->col , counter ,added_matrix) ;
-    // delete [] added_matrix ;
-    // exit(1);
-    // matrix.~SparseMatrix(); 
     return matrix ;
 
 } 
 
 
 SparseMatrix::~SparseMatrix(){
-    // cout << "hello " ;
+    cout << "destructor called" << endl ;
 }
 
 
@@ -208,12 +231,21 @@ int main(void){
 
 
     SparseMatrix ss = SparseMatrix(3 ,3 ,4 , arr)  ;
-    SparseMatrix sss = SparseMatrix(3 ,3 ,4 , arr1) ;
-
-    SparseMatrix ssss = ss.add(sss);
+    // SparseMatrix sss = SparseMatrix(3 ,3 ,4 , arr1) ;
+    // SparseMatrix *sss = ss.transpose();
+    // sss->show();
+    // sss->~SparseMatrix();
+    try
+    {
+        // ss.put(2,0,1);
+        ss.show();
+    }
+    catch(const char *e)
+    {
+        std::cerr << e << '\n';
+    }
+    
+    
+    
     cout << "heloo show " ;
-    ssss.show();
-    // ssss.~SparseMatrix() ;
-    // ss.~SparseMatrix() ;
-    // sss.~SparseMatrix() ;
 }
