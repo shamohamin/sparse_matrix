@@ -46,9 +46,10 @@ void SparseMatrix::show(){
     int controller = 0 ;
     for (int i = 0; i < this->row; i++){
         for (int j = 0; j < this->col; j++){
+            controller = 0;
             for (int k = 0; k < this->terms ; k++){
                 if(this->arr[k].row == i && this->arr[k].col == j){
-                    cout << 1 << " " ;
+                    cout << this->arr[k].value << " " ;
                     controller = 1 ;
                     break ;
                 }
@@ -190,7 +191,6 @@ SparseMatrix SparseMatrix::add(SparseMatrix second_matrix){
 } 
 
 void SparseMatrix::read_file(){
-
     ifstream fin ;
     fin.open("matrix.txt");
     int col = 0 ;
@@ -226,7 +226,26 @@ void SparseMatrix::read_file(){
     this->terms = terms ;
     fin.close() ;
 }
+void SparseMatrix::write_file(){
+    ofstream fin ;
+    fin.open("matrix.txt");
+    for(int i = 0 ; i < row ; i++){
+        for(int j = 0 ; j <  col ; j++){
+            for( int k = 0 ; k < terms ; k++ ){
+                if(arr[k].col == j && arr[k].row == i){
+                    fin << arr[k].value  << " ";
+                    break;
+                }
+            }
+            fin << "\n";
+        }
+    }
+    fin.close() ;
+}
+void SparseMatrix::read_file(){
 
+
+}
 
 SparseMatrix::~SparseMatrix(){
     cout << "destructor called" << endl ;
