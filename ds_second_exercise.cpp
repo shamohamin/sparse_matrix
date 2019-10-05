@@ -231,20 +231,21 @@ void SparseMatrix::write_file(){
     fin.open("matrix.txt");
     for(int i = 0 ; i < row ; i++){
         for(int j = 0 ; j <  col ; j++){
+            int controller = 0;
             for( int k = 0 ; k < terms ; k++ ){
                 if(arr[k].col == j && arr[k].row == i){
                     fin << arr[k].value  << " ";
+                    controller = 1;
                     break;
                 }
             }
-            fin << "\n";
+            if(controller == 0){
+                fin << "0 ";
+            }
         }
+        fin << "\n";
     }
     fin.close() ;
-}
-void SparseMatrix::read_file(){
-
-
 }
 
 SparseMatrix::~SparseMatrix(){
@@ -283,27 +284,7 @@ int main(void){
     SparseItem arr[]= {s ,s1 ,s2 ,s3 };
     SparseItem arr1[] = {s4 ,s5 ,s6 ,s7 } ;
 
-    SparseMatrix sss = SparseMatrix();
-    sss.read_file();
-
-    sss.show();
-
-    SparseMatrix ss = SparseMatrix(3 ,3 ,4 , arr)  ;
-    // SparseMatrix sss = SparseMatrix(3 ,3 ,4 , arr1) ;
-    // SparseMatrix *sss = ss.transpose();
-    // sss->show();
-    // sss->~SparseMatrix();
-    try
-    {
-        // ss.put(2,0,1);
-        // ss.show();
-    }
-    catch(const char *e)
-    {
-        std::cerr << e << '\n';
-    }
-    
-    
-    
-    cout << "heloo show " ;
+    SparseMatrix sss = SparseMatrix(3,3,4,arr);
+    sss.write_file();
+   
 }
