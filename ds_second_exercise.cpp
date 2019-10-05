@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-// #include <boost/algorithm/string.hpp>
 using namespace std ;
 #define size 100
 
@@ -241,10 +240,6 @@ void SparseMatrix::write_file(){
         }
     }
     fin.close() ;
-}
-void SparseMatrix::read_file(){
-
-
 }
 
 SparseMatrix::~SparseMatrix(){
